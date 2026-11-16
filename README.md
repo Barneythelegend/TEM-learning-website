@@ -1,4 +1,4 @@
-# TEM Insight Lab｜穿透式電子顯微鏡互動教室（v1.1 舒適投影版）
+# TEM Insight Lab｜穿透式電子顯微鏡互動教室
 
 這是一個完全前端的繁體中文 TEM／STEM 互動教學網站，依 2026/10/19 中興大學課堂《(Scanning) Transmission Electron Microscope》之內容脈絡整理，適合光電檢測技術 PBL 討論。
 
