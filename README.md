@@ -64,3 +64,8 @@
 **延伸區別：**在常規 TEM，物鏡光闌選束，由透鏡成像；在 STEM，細聚焦探針逐點掃描，依偵測角與掃描位置建立像素。真正 SAED 是直接投影繞射平面；HRTEM 的 FFT 是影像處理，不等同 SAED。
 
 **新增參考：** ETH Zürich ScopeM, "TEM – Imaging and Diffraction": https://scopem.ethz.ch/education/EM-ken/basics_theory/TEM_image-formation/TEM-imag-diff.html 。
+
+
+## 本次更新
+- 在訊號、成像、繞射、HRTEM、STEM、EDS/EELS 等章節新增示意圖與偵測器形狀圖解。
+- 保留原本互動模擬器、題庫與筆記功能。
