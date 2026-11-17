@@ -143,3 +143,23 @@ function exportNotes(){state.drafts[currentQuestion]=$('#selfAnswer').value;save
 $('#copyLink').addEventListener('click',()=>{if(location.protocol==='file:'){toast('離線版：直接傳送 HTML；要分享網址請部署 GitHub Pages');return;}copyText(location.href);});$('#printChecklist').addEventListener('click',()=>window.print());
 const observer=new IntersectionObserver(entries=>{const visible=entries.filter(x=>x.isIntersecting);if(!visible.length)return;const target=visible.sort((a,b)=>b.intersectionRatio-a.intersectionRatio)[0].target.id;$$('.nav-link').forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+target));},{rootMargin:'-20% 0px -55% 0px',threshold:[0,.05,.2,.4]});$$('.side-nav a[href^="#"]').forEach(a=>{const el=$(a.getAttribute('href'));if(el)observer.observe(el);});
 })();
+
+
+// Spherical aberration: simplified trend model for 200 keV electrons.
+(function(){
+  const angle=document.getElementById('csAngle');
+  const coeff=document.getElementById('csValue');
+  if(!angle || !coeff)return;
+  function render(){
+    const mrad=Number(angle.value),a=mrad/1000,cs=Number(coeff.value),lambda=0.00251; // nm
+    const diffraction=0.61*lambda/a;
+    const spherical=cs*1e6*a*a*a; // mm -> nm, simplified transverse disc radius
+    document.getElementById('csAngleOut').textContent=mrad+' mrad';
+    document.getElementById('csValueOut').textContent=cs.toFixed(1)+' mm';
+    document.getElementById('csDiffraction').textContent=diffraction.toFixed(2)+' nm';
+    document.getElementById('csSpherical').textContent=spherical.toFixed(2)+' nm';
+    const interp=document.getElementById('csInterpretation');
+    interp.textContent=spherical>diffraction*1.5?'在此簡化模型下，球面像差項明顯較大；減小孔徑角可降低像差，但衍射模糊會增加。':diffraction>spherical*1.5?'在此簡化模型下，衍射模糊較大；適當增加孔徑角可以改善衍射限制，但球面像差會增加。':'兩項影響量級接近，這說明為什麼實際解析度需要在孔徑角與透鏡像差之間做折衷。';
+  }
+  angle.addEventListener('input',render);coeff.addEventListener('input',render);render();
+})();

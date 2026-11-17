@@ -143,3 +143,27 @@ details{background:#f6f9f8;border-color:#d8e4e1}details>summary{color:#366676}de
 @media(max-width:780px){.signal-path-head{grid-template-columns:1fr}.flow-connector{height:21px;width:2px;margin:0 auto;background:#85b4ab}.flow-connector::after{border-left:5px solid transparent;border-right:5px solid transparent;border-top:7px solid #85b4ab;border-bottom:0;top:auto;bottom:0;right:-4px}.signal-definition{grid-template-columns:1fr}.signal-path{padding:15px}.signal-node{min-height:unset}.signal-path-head .signal-node{padding:15px}}
 @media(max-width:540px){.signal-branches{grid-template-columns:1fr}.hero-prof-title{font-size:41px!important}.hero-english{font-size:12px}.signal-matrix{min-width:730px}.signal-section .section-intro{font-size:14px}.signal-section h2{font-size:26px}}
 @media print{.signal-path,.signal-table-wrap{break-inside:avoid}.signal-matrix th,.signal-matrix td{padding:8px}.signal-section{break-inside:auto}}
+
+/* Spherical aberration explainer: accessible, light-page / dark-schematic contrast */
+.cs-panel{margin-top:18px;scroll-margin-top:98px}
+.cs-title-row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:8px}
+.cs-title-row h3{margin:9px 0 0}
+.cs-layout{margin-top:16px;align-items:start}
+.cs-viz{min-height:0}
+.cs-viz svg{width:100%;height:auto}
+.cs-viz .viz-caption{display:flex;flex-wrap:wrap;gap:8px;align-items:center;line-height:1.5}
+.cs-legend-item{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.cs-dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+.cs-dot.marginal{background:#ffc18a}.cs-dot.paraxial{background:#76c8eb}
+.cs-controls-title{margin:0 0 13px!important;font-size:15px!important}
+.cs-measures{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:15px 0}
+.cs-measures div{background:#eef4f2;border:1px solid #d5e3e0;border-radius:13px;padding:13px;min-width:0}
+.cs-measures small{font-size:11px;display:block;color:#5d717d}
+.cs-measures strong{font-size:20px;font-variant-numeric:tabular-nums;color:#2e7770;display:block}
+.cs-interpretation{color:#425d70;font-weight:600;line-height:1.65}
+.cs-formula{padding:10px 12px;background:#eef3f5;border:1px solid #dbe5e8;border-radius:10px;font-size:13px;color:#385565;line-height:1.8}
+.cs-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:18px}
+.cs-summary>div{border:1px solid #dbe3e3;background:#f4f7f6;border-radius:12px;padding:12px}
+.cs-summary b{display:block;font-size:13px;color:#276c69;margin-bottom:5px}
+.cs-summary span{display:block;font-size:12px;color:#526a78;line-height:1.65}
+@media(max-width:760px){.cs-summary{grid-template-columns:1fr}.cs-measures strong{font-size:17px}.cs-title-row .slide-ref{font-size:10px}}
