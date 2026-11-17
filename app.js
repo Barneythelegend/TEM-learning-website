@@ -29,7 +29,30 @@ const prepTexts={
  micro:{caption:'Ultramicrotomy：包埋後用超薄切片機取得柔軟材料、聚合物或生物樣品薄片。',expl:'可取得厚度相對均勻的薄片，卻可能帶來切割壓縮、刀痕、包埋劑背景、界面拉扯與染色對比假象。',label:'Ultrathin section'}
 };
 function setPrep(key){btnGroup('#prepModes','prep',key);$('#prepCaption').textContent=prepTexts[key].caption;$('#prepExplain').textContent=prepTexts[key].expl;const svg=$('#prepSVG');if(key==='fib')svg.innerHTML='<rect width="500" height="260" fill="#102337"/><rect x="55" y="147" width="385" height="28" fill="#899eaa"/><rect x="55" y="122" width="385" height="25" fill="#dfb780"/><rect x="55" y="108" width="385" height="14" fill="#79b1d7"/><rect x="180" y="90" width="128" height="18" fill="#a5e4d2"/><path d="M116 35 L240 107" stroke="#63e7d0" stroke-width="9" opacity=".75"/><path d="M237 108 V175 M261 108 V175" stroke="#fff" stroke-width="3" stroke-dasharray="5 4"/><text x="118" y="27" font-size="17" fill="#aafce4">Ga+ FIB beam</text><text x="167" y="219" font-size="15" fill="#d7e7ee">site-specific cross-section</text>';else if(key==='pips')svg.innerHTML='<rect width="500" height="260" fill="#102337"/><path d="M55 154 Q250 130 445 154 L445 188 Q250 182 55 188Z" fill="#91adc0"/><path d="M75 60 L228 144 M426 60 L271 144" stroke="#5ef3df" stroke-width="8" stroke-linecap="round" opacity=".7"/><path d="M220 141 L280 141 L280 178 L220 178Z" fill="#d9c18b"/><text x="250" y="35" font-size="16" fill="#b4f4e7" text-anchor="middle">Low-angle ion milling</text><text x="250" y="227" font-size="14" fill="#d0e8f4" text-anchor="middle">electron-transparent centre</text>';else if(key==='drop')svg.innerHTML='<rect width="500" height="260" fill="#102337"/><ellipse cx="250" cy="163" rx="183" ry="50" fill="#173a4e" stroke="#6c9db5" stroke-width="4"/><path d="M82 145 H417 M98 170 H402 M127 191 H370 M140 125 L175 204 M205 117 L230 211 M270 116 L296 211 M335 121 L359 202" stroke="#7bafc1" stroke-width="1.2" opacity=".6"/>'+Array.from({length:23},(_,i)=>{const x=110+(i*41)%270,y=139+(i*19)%47;return `<circle cx="${x}" cy="${y}" r="${3+(i%3)}" fill="#ffe0a9"/>`}).join('')+'<text x="250" y="52" font-size="16" text-anchor="middle" fill="#aafce5">Nanocrystals on carbon support grid</text>';else svg.innerHTML='<rect width="500" height="260" fill="#102337"/><rect x="72" y="93" width="350" height="86" rx="8" fill="#94abc4"/><path d="M72 122 H422 M72 149 H422" stroke="#ffe3ac" stroke-width="5"/><path d="M384 55 L322 94 L322 178 L389 201" fill="none" stroke="#72f3d1" stroke-width="10"/><text x="250" y="37" font-size="16" text-anchor="middle" fill="#aafce5">Ultramicrotome & diamond knife</text><text x="250" y="228" font-size="13" text-anchor="middle" fill="#d9e7f0">Thin section peeled from embedded block</text>';}$$('#prepModes [data-prep]').forEach(b=>b.addEventListener('click',()=>setPrep(b.dataset.prep)));setPrep('fib');
-const real=$('#realDots'),recip=$('#recipDots');for(let i=0;i<5;i++)for(let j=0;j<5;j++){addSvg(real,'circle',{cx:47+i*40,cy:33+j*35,r:5,fill:i===2&&j===2?'#f9ca8c':'#94d6e5'});addSvg(recip,'circle',{cx:313+i*43,cy:33+j*35,r:i===2&&j===2?5:2.7,fill:i===2&&j===2?'#fff':'#a1f8df'});}
+const real=$('#realDots'),recip=$('#recipDots'),diffSpacing=$('#diffSpacing');
+function drawDiffSpacing(){
+  const d=Number(diffSpacing.value), g=1/d;
+  $('#diffSpacingOut').textContent=d.toFixed(2)+' nm';
+  $('#diffSpacingReadout').textContent=`d = ${d.toFixed(2)} nm　→　g = ${g.toFixed(2)} nm⁻¹`;
+  real.replaceChildren();recip.replaceChildren();
+  const realPitch=24+20*(d-0.2)/0.3;
+  const reciprocalPitch=18+25*(0.5-d)/0.3;
+  for(let i=0;i<5;i++)for(let j=0;j<3;j++){
+    addSvg(real,'circle',{cx:(132+(i-2)*realPitch).toFixed(2),cy:42+j*50,r:5,fill:i===2&&j===1?'#f9ca8c':'#94d6e5'});
+    addSvg(recip,'circle',{cx:(399+(i-2)*reciprocalPitch).toFixed(2),cy:42+j*50,r:i===2&&j===1?5:3.2,fill:i===2&&j===1?'#fff':'#a1f8df'});
+  }
+  addSvg(real,'line',{x1:132,x2:132+realPitch,y1:175,y2:175,stroke:'#ffcf86','stroke-width':2.3});
+  addSvg(recip,'line',{x1:399,x2:399+reciprocalPitch,y1:175,y2:175,stroke:'#ffcf86','stroke-width':2.3});
+}
+// Keep both section controls in sync. Do not call the formation redraw before its listener is registered.
+diffSpacing.addEventListener('input',()=>{
+  drawDiffSpacing();
+  const other=$('#formationSpacing');
+  if(other){other.value=diffSpacing.value;other.dispatchEvent(new Event('input',{bubbles:true}));}
+});
+const formationSlider=$('#formationSpacing');
+if(formationSlider) formationSlider.addEventListener('input',()=>{diffSpacing.value=formationSlider.value;drawDiffSpacing()});
+drawDiffSpacing();
 const crystalDefs={si110:{a:.5431,type:'diamond',zone:'110',name:'Silicon (diamond) [110]'},cu001:{a:.3615,type:'fcc',zone:'001',name:'Copper (FCC) [001]'},fe001:{a:.2866,type:'bcc',zone:'001',name:'Iron (BCC) [001]'},si001:{a:.5431,type:'diamond',zone:'001',name:'Silicon (diamond) [001]'}};
 let spots=[],selSpot=null;
 function allowed(h,k,l,type){if(type==='bcc')return (h+k+l)%2===0;if(type==='fcc')return (Math.abs(h%2)===Math.abs(k%2)&&Math.abs(k%2)===Math.abs(l%2));if(type==='diamond'){const odds=[h,k,l].map(x=>Math.abs(x)%2);if(odds.every(x=>x===1))return true;if(odds.every(x=>x===0))return ((h+k+l)%4+4)%4===0;return false;}return true;}
