@@ -203,3 +203,7 @@ details{background:#f6f9f8;border-color:#d8e4e1}details>summary{color:#366676}de
 .legend-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
 @media (max-width:1100px){.figure-grid,.figure-grid.three,.dual-fig,.diagram-steps,.figure-strip{grid-template-columns:1fr}}
 @media (max-width:780px){.figure-card{padding:12px}.mini-detector{padding:10px}}
+
+/* Make SVG labels readable above lines */
+.figure-card svg text, .wide-figure svg text, .mini-detector svg text { paint-order: stroke; stroke: rgba(16,32,50,.92); stroke-width: 3px; stroke-linejoin: round; }
+.figure-card svg text[fill="#13283e"], .figure-card svg text[fill="#15283b"], .wide-figure svg text[fill="#13283e"], .wide-figure svg text[fill="#15283b"] { stroke: rgba(255,255,255,.92); stroke-width: 2.5px; }
