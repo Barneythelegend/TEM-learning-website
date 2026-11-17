@@ -86,3 +86,60 @@ details{background:#f6f9f8;border-color:#d8e4e1}details>summary{color:#366676}de
 
 .hero-graphic-caption{padding:7px 5px 3px;text-align:center;color:#577681;font-size:12px;font-weight:600;letter-spacing:.025em}
 .floating-meta{fill:#587783;font-weight:750}
+
+/* v1.2 | beginner first: readable full names before abbreviations */
+.beginner-terms{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:16px 0}.term-intro{background:var(--panel,#fff);border:1px solid #cededb;border-radius:14px;padding:15px}.term-intro b{font-size:14px;line-height:1.6;color:#275b63}.term-intro p{margin:8px 0 0;font-size:13px;line-height:1.75}.bfdf-primer{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 16px}.bfdf-step{background:#e9f3f0;border:1px solid #d0e3dc;border-radius:12px;padding:14px}.bfdf-step .step-index{font-size:13px;font-weight:800;color:#226f68;display:inline-block;margin-right:7px}.bfdf-step strong{color:#264f59}.bfdf-step p{font-size:13px;line-height:1.7;margin:8px 0 0}.side-nav .nav-link{line-height:1.5}.switch-row .chip{line-height:1.45;white-space:normal}@media(max-width:950px){.beginner-terms{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:640px){.beginner-terms,.bfdf-primer{grid-template-columns:1fr}.term-intro{padding:12px}}
+
+/* Academic overview · neutral technical presentation */
+.hero-prof-title{font-size:clamp(40px,4.3vw,66px)!important;line-height:1.14;letter-spacing:-.052em;margin-bottom:8px!important}
+.hero-english{font-size:14px;letter-spacing:.03em;font-weight:650;color:#4b7180;margin:4px 0 19px}
+.hero .lead{font-size:16px;line-height:1.87;max-width:590px}
+.hero .fact-strip{margin-top:25px}
+.hero .fact strong{font-size:15px;line-height:1.5}
+.hero .fact span{font-size:11px;line-height:1.55;display:block}
+.signal-section{max-width:1160px}
+.signal-section h2{font-size:clamp(28px,2.8vw,38px)}
+.signal-section .section-intro{max-width:1080px}
+.signal-path{border:1px solid #d3dfdf;background:linear-gradient(135deg,#f9fbfa,#eef4f2);border-radius:20px;padding:22px 21px 24px;box-shadow:0 6px 20px rgba(39,71,76,.03)}
+.signal-path-head{display:grid;grid-template-columns:minmax(0,1fr) 24px minmax(0,1fr) 24px minmax(0,1.2fr);gap:10px;align-items:center}
+.signal-node{height:100%;min-width:0;background:#fff;border:1px solid #cfdcdb;border-radius:14px;padding:16px 16px 15px;display:flex;flex-direction:column;gap:6px}
+.signal-node.highlighted{background:#e9f3f0;border-color:#9cbbb1}
+.signal-node strong{color:#264a53;font-size:16px;line-height:1.5}
+.signal-node span:not(.node-number){font-size:13px;line-height:1.65;color:#4a6574}
+.signal-node small{margin-top:auto;color:#587c86;font-size:11px;line-height:1.5}
+.node-number{font-size:10px;letter-spacing:.12em;color:#367b75;font-weight:850}
+.flow-connector{font-size:0;width:100%;height:1.5px;background:#85b4ab;position:relative}
+.flow-connector::after{content:"";position:absolute;right:0;top:-4px;border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:7px solid #85b4ab}
+.flow-lower-label{text-align:center;margin:18px 0 14px;font-weight:850;color:#497782;font-size:12px;letter-spacing:.045em}
+.flow-lower-label:before{content:"↓";display:block;margin-bottom:4px;font-size:25px;line-height:1.1;color:#3c8b80}
+.signal-branches{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.signal-branch{min-width:0;background:#fff;border:1px solid #d1e0dd;border-top:3px solid #6c9d9b;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:7px}
+.signal-branch:nth-child(2){border-top-color:#83aac5}.signal-branch:nth-child(3){border-top-color:#bc9763}.signal-branch:nth-child(4){border-top-color:#b196ba}
+.signal-branch b{font-size:14px;color:#2c5260;line-height:1.55}
+.signal-branch span{font-size:12px;color:#647c88;line-height:1.6}
+.signal-branch strong{font-size:12px;color:#326f6b;line-height:1.6;margin-top:auto}
+.signal-definition{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:15px}
+.signal-definition>div{background:#fffefa;border:1px solid #dce5e3;padding:14px 16px;border-radius:12px;min-width:0}
+.definition-key{display:block;font-weight:850;color:#357970;font-size:14px}
+.signal-definition b{font-size:11px;color:#667d89;font-weight:650}
+.signal-definition p{font-size:12px;line-height:1.65;margin:6px 0 0;color:#4c6774}
+.subsection-heading{font-size:21px;margin:30px 0 14px;letter-spacing:-.025em;color:#284b57}
+.signal-table-wrap{overflow-x:auto;border:1px solid #d5e1de;border-radius:16px;background:#fff}
+.signal-matrix{width:100%;border-collapse:collapse;font-size:13px;line-height:1.65;min-width:760px}
+.signal-matrix th,.signal-matrix td{border-bottom:1px solid #e0e8e6;text-align:left;padding:15px 16px;vertical-align:top}
+.signal-matrix thead th{color:#305d60;background:#eaf2f0;font-size:12px;font-weight:850;white-space:nowrap}
+.signal-matrix tbody tr:last-child th,.signal-matrix tbody tr:last-child td{border-bottom:0}
+.signal-matrix tbody th{width:24%;font-weight:650;color:#35525e;background:#fafcfb}
+.signal-matrix tbody td{color:#496474}
+.signal-matrix tbody tr:hover td,.signal-matrix tbody tr:hover th{background:#f5faf8}
+.tech-name{font-size:14px;font-weight:850;display:block;color:#315f62;margin-bottom:4px}
+.signal-matrix small{color:#69828d;font-size:11px;font-weight:550}
+.signal-explain{margin-top:15px}
+.signal-explain .panel{box-shadow:none}
+.signal-explain .panel h3{font-size:17px}
+.signal-explain .panel p{font-size:13px;line-height:1.8}
+.signal-note{margin-top:18px}
+@media(max-width:1150px){.signal-branches{grid-template-columns:repeat(2,minmax(0,1fr))}.signal-path-head{grid-template-columns:minmax(0,1fr) 22px minmax(0,1fr) 22px minmax(0,1.2fr)}.signal-node{padding:13px}.signal-node strong{font-size:14px}}
+@media(max-width:780px){.signal-path-head{grid-template-columns:1fr}.flow-connector{height:21px;width:2px;margin:0 auto;background:#85b4ab}.flow-connector::after{border-left:5px solid transparent;border-right:5px solid transparent;border-top:7px solid #85b4ab;border-bottom:0;top:auto;bottom:0;right:-4px}.signal-definition{grid-template-columns:1fr}.signal-path{padding:15px}.signal-node{min-height:unset}.signal-path-head .signal-node{padding:15px}}
+@media(max-width:540px){.signal-branches{grid-template-columns:1fr}.hero-prof-title{font-size:41px!important}.hero-english{font-size:12px}.signal-matrix{min-width:730px}.signal-section .section-intro{font-size:14px}.signal-section h2{font-size:26px}}
+@media print{.signal-path,.signal-table-wrap{break-inside:avoid}.signal-matrix th,.signal-matrix td{padding:8px}.signal-section{break-inside:auto}}

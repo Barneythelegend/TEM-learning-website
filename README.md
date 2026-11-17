@@ -1,60 +1,47 @@
-# TEM Insight Lab｜穿透式電子顯微鏡互動教室
+# TEM Insight Lab
 
-這是一個完全前端的繁體中文 TEM／STEM 互動教學網站，依 2026/10/19 中興大學課堂《(Scanning) Transmission Electron Microscope》之內容脈絡整理，適合光電檢測技術 PBL 討論。
+**穿透式電子顯微鏡（TEM／STEM）與材料分析｜互動式教學網站**
 
-## v1.1 小幅更新（2026-11-17）
+本站以中興大學 2026 年 (S)TEM 課程的教學主線為基礎，依照「技術概覽 → 訊號與偵測器 → 電子光學 → 試片製作 → 繞射 → 成像 → 化學分析 → 案例與練習」編排。
 
-- 改成米白、霧藍、低飽和青綠色的舒適淺色介面，更適合課堂投影與長時間閱讀。
-- 科學模擬畫布保留必要的深色背景，改善繞射點、FFT 點位辨識。
-- SAED 材料標籤、BF／DF 晶粒名稱、EDS／EELS 峰名移到獨立標題／圖例區，避免蓋住線條與訊號。
-- 修正首頁光學柱註解區與個別圖示文字位置，並檢查手機版、題庫與滑桿互動。
-- 保留既有 62 題與本機學習進度；localStorage 鍵名不變。
+## 網站內容
 
-## 包含內容
+- **技術概覽：**電子槍、入射電子束、薄片、電子／X 光／能量損失訊號，以及各偵測器典型位置和材料分析用途。
+- **電子光學：**電子槍、透鏡、光闌、相機、電子波長和像差。
+- **試片製備：**FIB、PIPS、滴樣與超薄切片，搭配試片損傷與假象。
+- **電子繞射：**互動式 SAED、晶面間距、區軸、選擇定則與 Si(002) 禁制反射。
+- **影像判讀：**TEM 明場／暗場、HRTEM、FFT、晶格缺陷。
+- **掃描穿透與分析：**STEM、ADF／HAADF、EDS、EELS 及 Z-contrast 的限制。
+- **練習系統：**62 題 PBL 問答、隨機抽題、熟悉度、進度與個人筆記匯出。
 
-- TEM 電子槍、透鏡、光闌、相機長度及電子波長計算
-- FIB／PIPS／滴樣／超薄切片原理與製樣假象
-- 互動 SAED：Si / Cu / α-Fe、[110]/[001]、camera length、beam voltage、(hkl)、d-spacing、禁制反射
-- 互動 TEM-BF／DF：objective aperture、晶粒傾角及繞射對比
-- HRTEM／FFT 概念互動，以及 Stacking Fault、Twin、Dislocation
-- STEM-BF／ADF／HAADF 與 Z-contrast 限制
-- EDS／EELS 光譜概念比較
-- 62 題有標準回答、常見誤區和延伸追問的 PBL 題庫
-- 章節打卡、儲存作答、個人進度與 TXT 筆記匯出
+## 發布到 GitHub Pages
 
-## 最簡單的分享方法：單檔版
+將本 ZIP **解壓縮**後，直接把 `index.html`、`styles.css`、`app.js` 和 `README.md` 上傳到 GitHub Repository 的**根目錄**，並按 **Commit changes**。
 
-除了這個網站資料夾以外，另有 `TEM_互動式教學網站_v1.1_舒適版.html`。該檔案把 CSS、JS 全部包在一起，**離線雙擊即能開啟**，也可以直接丟給同學。若瀏覽器不允許本機儲存，網站仍可操作，只是關閉後未必能保留學習進度；可以透過「匯出我的複習筆記」保存。
+若已經發布 GitHub Pages，不必新建 Repository；將上述檔案覆蓋舊版並提交即可。若是首次發布，請至 **Settings → Pages → Build and deployment**，設定 `Deploy from a branch`、`main`、`/ (root)`。
 
-## 部署 GitHub Pages（可分享網址）
+發布後，Repository 位址和網站網址不同。一般 GitHub Pages 的網站網址是：
 
-1. 建立一個公開 GitHub repository，例如 `tem-insight-lab`。
-2. 把 **本 ZIP 解壓縮後的 `index.html`、`styles.css`、`app.js`** 上傳到 repository 的**根目錄**。請勿只上傳 `index.html`，否則互動功能與版面樣式會缺失。
-3. 到 GitHub repository **Settings → Pages → Build and deployment**，選 **Deploy from a branch**，branch 選 `main`，folder 選 `/ (root)`，儲存設定。
-4. 等 GitHub Pages 顯示網址（例如 `https://<account>.github.io/tem-insight-lab/`）後，即可分享到班級群組。這裡的網址只是格式範例，不代表已部署。
+`https://<github-username>.github.io/<repository-name>/`
 
-本站不需要 API key、資料庫、CDN、網路字型或後端程式。
+實際地址以 GitHub Pages 頁面提供的連結為準。
 
-## 內容如何使用
+## 離線使用
 
-建議先跑：繞射模擬器 → BF／DF → HRTEM／FFT → STEM／EDS／EELS，再回頭讀電子光學與製樣。口試題庫可按主題、難度、關鍵詞過濾，作答後點「顯示標準回答」，最後按「我會了」或「還不會」。
+另外提供單一 HTML 檔，將 HTML、CSS 與 JavaScript 合併在一起。無需網路與伺服器即可開啟，適合課堂展示備份。
 
-## 教學模型與限制
+網站不連接 AI 服務、帳號系統或後端資料庫。練習進度保存在每位使用者的本機瀏覽器；不同裝置之間不會自動同步。
 
-- 圖形為**原創示意**；沒有將原課堂授課投影片整頁複製到可分享網站。網站會標明對應 slide 範圍。
-- SAED spots 使用理想立方晶格、zone axis、運動學選擇規則與近軸 `R ≈ Lλ/d` 計算；不包含 Ewald 球精細激發誤差、多束動力學或強度定量。
-- BF/DF、HRTEM、HAADF 和 EDS/EELS 光譜互動屬**定性概念模型**，不是設備軟體或定量 multislice 模擬器。不能用於研究數據擬合或實驗參數校正。
-- 私人學習進度保存在瀏覽器本機 localStorage；不同設備與瀏覽器不會自動同步，也不會上傳到 GitHub。
-- 不要在公開版本放入未公開論文、實驗照片、未授權課堂原圖或私人資料。
+## 模擬與分析限制
 
-## 資料與延伸參考
+所有物理模擬均為**教學用途的定性示意**；SAED 幾何僅使用理想晶格與小角度近似。HRTEM、BF／DF、HAADF、EDS、EELS 不代表完整的實驗數據模擬。不同儀器型號的偵測器位置與配置可能有所不同。
 
-- 課堂主線：吳建霆（TSRI），《(S)TEM》教學投影片，國立中興大學，2026/10/19（學習者提供）。
-- Thermo Fisher — Transmission Electron Microscopy Techniques: https://www.thermofisher.com/us/en/home/electron-microscopy/products/transmission-electron-microscopes/techniques/materials-science.html
-- JEOL TEM BF/DF operation guide: https://www.i2at.msstate.edu/equipment/docs/Jeol-2100_Manual.pdf
-- Thermo Fisher — Electron Energy Loss Spectroscopy: https://www.thermofisher.com/us/en/home/materials-science/eels.html
-- NTU Singapore — TEM techniques & applications: https://www.ntu.edu.sg/facts/facilities/tem-cluster/tem-instrumentation-techniques-application
+對外公開時，請勿上傳未獲授權的投影片原圖、未公開實驗結果或個人資料。
 
-## 自行修改
+## 主要參考
 
-網站原始檔只有 `index.html`、`styles.css`、`app.js`。口試題庫位於 `app.js` 的 `rawQ` 陣列，術語表則是 `glossary` 陣列。修改題目後可以重新分享／重新部署。
+- 國立中興大學 2026 年課堂講義，《(Scanning) Transmission Electron Microscope》（吳建霆研究員，TSRI）。
+- Thermo Fisher Scientific：Transmission Electron Microscopy Techniques、Electron Energy-Loss Spectroscopy。
+- JEOL TEM 操作說明，以及新加坡南洋理工大學 TEM／STEM 技術資料。
+
+網站為獨立編寫之教學內容，非儀器製造商的正式操作手冊。
