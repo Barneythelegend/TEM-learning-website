@@ -145,21 +145,154 @@ const observer=new IntersectionObserver(entries=>{const visible=entries.filter(x
 })();
 
 
-// Spherical aberration: simplified trend model for 200 keV electrons.
-(function(){
+// Interactive spherical-aberration schematic and simplified educational estimates.
+(function initSphericalAberration(){
   const angle=document.getElementById('csAngle');
   const coeff=document.getElementById('csValue');
-  if(!angle || !coeff)return;
-  function render(){
-    const mrad=Number(angle.value),a=mrad/1000,cs=Number(coeff.value),lambda=0.00251; // nm
-    const diffraction=0.61*lambda/a;
-    const spherical=cs*1e6*a*a*a; // mm -> nm, simplified transverse disc radius
-    document.getElementById('csAngleOut').textContent=mrad+' mrad';
-    document.getElementById('csValueOut').textContent=cs.toFixed(1)+' mm';
-    document.getElementById('csDiffraction').textContent=diffraction.toFixed(2)+' nm';
-    document.getElementById('csSpherical').textContent=spherical.toFixed(2)+' nm';
-    const interp=document.getElementById('csInterpretation');
-    interp.textContent=spherical>diffraction*1.5?'在此簡化模型下，球面像差項明顯較大；減小孔徑角可降低像差，但衍射模糊會增加。':diffraction>spherical*1.5?'在此簡化模型下，衍射模糊較大；適當增加孔徑角可以改善衍射限制，但球面像差會增加。':'兩項影響量級接近，這說明為什麼實際解析度需要在孔徑角與透鏡像差之間做折衷。';
+  const diagram=document.getElementById('csRayDiagram');
+  if(!angle || !coeff || !diagram)return;
+  const byId=id=>document.getElementById(id);
+  // Schematic ray positions are deliberately exaggerated (NOT an optical ray tracer).
+  const lensX=166, axisY=132, paraxialX=450, rayEnd=538;
+  function rayPath(offset,focusX,above){
+    const sign=above?-1:1;
+    const inletY=axisY+sign*offset;
+    const targetY=axisY+(axisY-inletY)*(rayEnd-lensX)/(focusX-lensX)+sign*offset;
+    return `M24 ${inletY.toFixed(2)} H${lensX} L${focusX.toFixed(2)} ${axisY} L${rayEnd} ${targetY.toFixed(2)}`;
   }
-  angle.addEventListener('input',render);coeff.addEventListener('input',render);render();
+  function render(){
+    const alphaMrad=Number(angle.value), alpha=alphaMrad/1000;
+    const csMm=Number(coeff.value), lambdaNm=0.00251;
+    const diffractionNm=0.61*lambdaNm/alpha;
+    const sphericalNm=csMm*1e6*alpha**3;
+    byId('csAngleOut').textContent=alphaMrad+' mrad';
+    byId('csValueOut').textContent=csMm.toFixed(1)+' mm';
+    byId('csDiffraction').textContent=diffractionNm.toFixed(2)+' nm';
+    byId('csSpherical').textContent=sphericalNm.toFixed(2)+' nm';
+    const interp=byId('csInterpretation');
+    interp.textContent=sphericalNm>diffractionNm*1.5
+      ? '球面像差模糊較大：減小孔徑角可降低此項，但衍射模糊會增加。'
+      : diffractionNm>sphericalNm*1.5
+      ? '衍射模糊較大：增加孔徑角可降低此項，但球面像差會快速增加。'
+      : '兩項量級接近，表示孔徑角與球面像差之間存在取捨。';
+
+    // Axial displacement tracks Cs * alpha² qualitatively; visual coordinates are not physical units.
+    const focusShift=Math.min(145, 76*(csMm/1.2)*(alphaMrad/6)**2);
+    const farX=paraxialX-focusShift;
+    const outerOffset=42+2.8*alphaMrad;
+    const innerOffset=22;
+    byId('csNearTop').setAttribute('d',rayPath(innerOffset,paraxialX,true));
+    byId('csNearBottom').setAttribute('d',rayPath(innerOffset,paraxialX,false));
+    byId('csFarTop').setAttribute('d',rayPath(outerOffset,farX,true));
+    byId('csFarBottom').setAttribute('d',rayPath(outerOffset,farX,false));
+    byId('csFarPoint').setAttribute('cx',farX.toFixed(2));
+    byId('csFarGuide').setAttribute('x1',farX.toFixed(2));
+    byId('csFarGuide').setAttribute('x2',farX.toFixed(2));
+    byId('csFarLabel').setAttribute('x',Math.min(farX,paraxialX-45).toFixed(2));
+    // Illustrate spread of marginal rays at the paraxial focal plane.
+    const blurRadius=Math.min(93,Math.abs(outerOffset*(paraxialX-farX)/(farX-lensX)));
+    const blur=byId('csBlurPlane');
+    blur.setAttribute('y',(axisY-blurRadius).toFixed(2));
+    blur.setAttribute('height',(2*blurRadius).toFixed(2));
+  }
+  angle.addEventListener('input',render);
+  angle.addEventListener('change',render);
+  coeff.addEventListener('input',render);
+  coeff.addEventListener('change',render);
+  render();
+})();
+
+// Integrated explanatory model: crystal position -> diffraction directions -> selected beams -> camera.
+(() => {
+  'use strict';
+  const root=document.getElementById('beam-story-simulator');
+  if(!root)return;
+  const el=(id)=>document.getElementById(id);
+  const modeBox=el('formationModes');
+  const tilt=el('formationTilt');
+  const dSlider=el('formationSpacing');
+  let mode='bf';
+  const svgNS='http://www.w3.org/2000/svg';
+  const add=(parent,tag,attrs)=>{const n=document.createElementNS(svgNS,tag);for(const [key,value] of Object.entries(attrs))n.setAttribute(key,String(value));parent.appendChild(n);return n;};
+  const lighten=(val)=>{
+    const v=Math.round(23+Math.max(0,Math.min(1,val))*215);
+    return `rgb(${v},${Math.min(255,v+11)},${Math.min(255,v+20)})`;
+  };
+  const updateSpot=(node,energy)=>{
+    node.style.opacity=String((.23+energy*.77).toFixed(3));
+    node.setAttribute('r',(4.5+7*energy).toFixed(2));
+  };
+  function rerender(){
+    const aTilt=Number(tilt.value);
+    const ag1=.76*Math.exp(-Math.pow(aTilt/4.5,2));
+    const ag2=.05;
+    const bg1=.07;
+    const bg2=.55;
+    const a0=Math.max(.04,1-ag1-ag2-.05);
+    const b0=1-bg1-bg2-.06;
+    el('formationTiltOut').textContent=aTilt+'°';
+    el('formA0').style.width=(a0*100).toFixed(0)+'%';
+    el('formAg1').style.width=(ag1*100).toFixed(0)+'%';
+    el('formBg2').style.width=(bg2*100).toFixed(0)+'%';
+    updateSpot(el('formSpot000'),(a0+b0)/2);
+    updateSpot(el('formSpotG1'),(ag1+bg1)/2);
+    updateSpot(el('formSpotG2'),(ag2+bg2)/2);
+    updateSpot(el('formCamera000'),(a0+b0)/2);
+    updateSpot(el('formCameraG1'),(ag1+bg1)/2);
+    updateSpot(el('formCameraG2'),(ag2+bg2)/2);
+    const ring=el('formApertureRing');
+    const isDP=mode==='dp';
+    ring.style.display=isDP?'none':'';
+    const spots={bf:[120,104],df1:[181,77],df2:[63,65]};
+    if(!isDP){ring.setAttribute('cx',spots[mode][0]);ring.setAttribute('cy',spots[mode][1]);}
+    el('formationImagePixels').style.display=isDP?'none':'';
+    el('formationPatternPixels').style.display=isDP?'':'none';
+    const title=el('formationCameraKind'), caption=el('formationCameraCaption'), explain=el('formationExplanation');
+    if(isDP){
+      title.textContent='後焦平面 → 繞射圖';
+      caption.textContent='相機橫縱位置對應散射角度，亮度代表該方向的電子訊號；不是樣品顆粒的位置照片。';
+      explain.textContent='繞射模式：把物鏡後焦平面經中間／投影透鏡放大到相機。中心的 000 代表近直行電子，g₁ 和 g₂ 代表不同散射方向；斑點位置與晶格週期、取向相關。這裡不使用物鏡光闌挑單一方向。';
+    }else{
+      const a={bf:a0,df1:ag1,df2:ag2}[mode];
+      const b={bf:b0,df1:bg1,df2:bg2}[mode];
+      el('formGrainA').setAttribute('fill',lighten(a));
+      el('formGrainB').setAttribute('fill',lighten(b));
+      title.textContent='像平面 → '+({bf:'明場影像',df1:'g₁ 暗場影像',df2:'g₂ 暗場影像'}[mode]);
+      caption.textContent=`相機保留晶粒 A（左）和晶粒 B（右）的位置；目前亮度分別代表通過所選光闌的理想化強度。`;
+      if(mode==='bf')explain.textContent='明場：物鏡光闌只讓中央直射束（000）參與成像。若晶粒 A 正在強烈繞射到 g₁，它剩下的直射電子較少，所以 A 在明場圖變暗。晶粒並不是本身「變黑」了。';
+      else if(mode==='df1')explain.textContent='暗場 g₁：光闌只放行第一個繞射方向 g₁，其餘包含直射束大多被阻擋。晶粒 A 符合 g₁ 條件，往此方向的電子較多，所以它在原來的左側位置呈亮色；B 較暗。';
+      else explain.textContent='暗場 g₂：光闌改選另一個出射方向 g₂。現在晶粒 B 對這一道束貢獻較大，所以右側 B 變亮、A 變暗。同一束入射電子、同一塊樣品，只是「挑選不同方向的電子」形成不同影像。';
+      if(Math.abs(aTilt)>=6)explain.textContent+=' 現在把晶粒 A 傾斜，g₁ 繞射條件變差，所以 A 的 g₁ 訊號減弱。';
+    }
+    [...modeBox.querySelectorAll('[data-formmode]')].forEach(btn=>{const active=btn.dataset.formmode===mode;btn.classList.toggle('active',active);btn.setAttribute('aria-pressed',String(active));});
+  }
+  modeBox.addEventListener('click',e=>{const btn=e.target.closest('[data-formmode]');if(!btn)return;mode=btn.dataset.formmode;rerender()});
+  tilt.addEventListener('input',rerender);
+  tilt.addEventListener('change',rerender);
+  function rerenderSpacing(){
+    const d=Number(dSlider.value);
+    el('formationSpacingOut').textContent=d.toFixed(2)+' nm';
+    const real=el('formRealSpace'),recip=el('formRecipSpace');
+    real.replaceChildren();recip.replaceChildren();
+    add(real,'rect',{x:0,y:0,width:320,height:112,fill:'#14283b'});
+    add(recip,'rect',{x:0,y:0,width:320,height:112,fill:'#14283b'});
+    const s=d*138; const n=Math.floor(270/s);
+    for(let i=0;i<=n;i++){
+      let x=25+i*s;
+      for(let y of [29,55,81])add(real,'circle',{cx:x.toFixed(1),cy:y,r:5,fill:'#91d6e8'});
+    }
+    add(real,'line',{x1:25,y1:104,x2:25+s,y2:104,stroke:'#ffd08b','stroke-width':2});
+    add(real,'path',{d:`M25 100 V108 M${(25+s).toFixed(1)} 100 V108`,stroke:'#ffd08b','stroke-width':1.5});
+    const r=27/d;
+    add(recip,'path',{d:'M18 56 H302 M160 12 V100',stroke:'#4d6b80','stroke-width':1,'stroke-dasharray':'4 5'});
+    for(let side of [-1,1])add(recip,'circle',{cx:160+side*r,cy:56,r:6,fill:'#93efdc'});
+    add(recip,'circle',{cx:160,cy:56,r:6,fill:'#f4f9ff'});
+    add(recip,'line',{x1:160,y1:89,x2:160+r,y2:89,stroke:'#ffcf86','stroke-width':2});
+    add(recip,'path',{d:`M160 85 V93 M${(160+r).toFixed(1)} 85 V93`,stroke:'#ffcf86','stroke-width':1.4});
+    const g=1/d;
+    el('formationSpacingExplain').textContent=`目前 d = ${d.toFixed(2)} nm；空間頻率 g = 1/d = ${g.toFixed(2)} nm⁻¹。d 變小，g 變大，因此在固定電子波長和有效相機長度下，對應繞射點距中心更遠。兩側共用的尺度僅是示意。`;
+  }
+  dSlider.addEventListener('input',rerenderSpacing);
+  dSlider.addEventListener('change',rerenderSpacing);
+  rerender();rerenderSpacing();
 })();
